@@ -25,7 +25,8 @@ class Person(metaclass=CachedMeta):
         return tuple(a for a in self.__dict__.values())
 
     def __repr__(self):
-        return f"{type(self).__name__}{self._as_tuple()}"
+        args = ", ".join(repr(x) for x in self._as_tuple())
+        return f"{type(self).__name__}({args})"
 
 
 if __name__ == "__main__":
