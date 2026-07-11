@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
-from typing import Iterator
+from typing import Iterator, Any, cast
 import re
 
 
@@ -10,7 +10,7 @@ class _Re:
 
 
 # (?P<name>...)
-TOKENS: dict[str, re.Pattern] = {
+TOKENS: dict[str, str] = {
     t[0]: f"(?P<{t[0]}>{t[1]})"
     for t in (
         ("NAME", r"[A-Za-z_][A-Za-z_0-9]+"),
@@ -26,7 +26,7 @@ class Token:
         self.name = name
         self.val = val
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         if isinstance(other, type(self)):
             return self.__dict__ == other.__dict__
         elif isinstance(other, str):
@@ -46,7 +46,7 @@ def iter_tokens(sexpr: str) -> Iterator[Token]:
     for match in re.finditer(pat, sexpr):
         if match.lastgroup == "WS":
             continue
-        yield Token(match.lastgroup, match.group(0))
+        yield Token(cast(str, match.lastgroup), match.group(0))
 
 
 if __name__ == "__main__":
