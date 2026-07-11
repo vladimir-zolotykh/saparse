@@ -15,12 +15,12 @@ class Singleton(type):
 
 class Logger(metaclass=Singleton):
     def __init__(self):
-        print(f"Initializing {self}")
+        print(f"Initializing {type(self).__name__} object")
 
 
 class Module(metaclass=Singleton):
     def __init__(self):
-        print(f"Initializing {self}")
+        print(f"Initializing {type(self).__name__} object")
 
 
 if __name__ == "__main__":
