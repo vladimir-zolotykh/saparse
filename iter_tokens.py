@@ -26,6 +26,14 @@ class Token:
         self.name = name
         self.val = val
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, type(self)):
+            return self.__dict__ == other.__dict__
+        elif isinstance(other, str):
+            return self.name == other
+        else:
+            return False
+
     def as_tuple(self):
         return ", ".join(f"{v!r}" for v in self.__dict__.values())
 
