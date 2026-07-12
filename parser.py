@@ -9,7 +9,7 @@ import node as N
 class Parser:
     def __init__(self):
         self.tokens: Iterator[T.Token] = iter([])
-        self.token: T.Token = None
+        self.token: T.Token = T.Token("EOF")
 
     def _next(self, tokens: Iterator[T.Token]) -> T.Token:
         tok: T.Token = next(self.tokens)
@@ -30,7 +30,7 @@ class Parser:
         try:
             self._advance()
         except StopIteration:
-            self.token = None
+            self.token = T.Token("EOF")
 
     def expr(self) -> N.Node:
         res: N.Node = self.term()
@@ -53,7 +53,7 @@ class Parser:
         if self.token == "(":
             self._consume()
             res = self.expr()
-            self._expect(")")
+            self._expect(T.Token(")"))
         else:
             res = N.Num(float(self.token.val))
             self._consume()

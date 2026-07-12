@@ -28,7 +28,7 @@ Tokens: dict[str, str] = {
 
 
 class Token:
-    def __init__(self, name: str, val: str | float):
+    def __init__(self, name: str, val: str | float = "EOF"):
         self.name = name
         self.val = val
 
