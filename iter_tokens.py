@@ -3,10 +3,20 @@
 # PYTHON_ARGCOMPLETE_OK
 from typing import Iterator, Any, cast
 import re
+from enum import StrEnum
+
+
+class Symbols(StrEnum):
+    PLUS = "+"
+    MINUS = "-"
+    MUL = "*"
+    DIV = "/"
+    LPAREN = "("
+    RPAREN = ")"
 
 
 # (?P<name>...)
-TOKENS: dict[str, str] = {
+Tokens: dict[str, str] = {
     t[0]: f"(?P<{t[0]}>{t[1]})"
     for t in (
         ("NAME", r"[A-Za-z_][A-Za-z_0-9]+"),
@@ -38,7 +48,7 @@ class Token:
 
 
 def iter_tokens(sexpr: str) -> Iterator[Token]:
-    pat = "|".join(TOKENS.values())
+    pat = "|".join(Tokens.values())
     for match in re.finditer(pat, sexpr):
         if match.lastgroup == "WS":
             continue
