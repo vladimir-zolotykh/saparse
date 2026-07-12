@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 from typing import Iterator
-from functools import wraps
 import iter_tokens as T
 import node as N
 
@@ -12,8 +11,15 @@ class Parser:
         self.tokens: Iterator[T.Token] = iter([])
         self.token: T.Token = None
 
+    def _next(self, tokens: Iterator[T.Token]) -> T.Token:
+        tok: T.Token = next(self.tokens)
+        # print(f"*** {tok = }")
+        return tok
+
     def _advance(self) -> T.Token:
-        self.token = next(self.tokens)
+        self.token = self._next(self.tokens)
+        # self.token = next(self.tokens)
+        return self.token
 
     def _expect(self, expected: T.Token) -> None:
         if self.token != expected:
@@ -60,7 +66,7 @@ class Parser:
 
 
 if __name__ == "__main__":
-    # sexpr = "2 + 3"
-    sexpr = "2 + (3 * 4) + 5"
+    sexpr = "2 + 3"
+    # sexpr = "2 + (3 * 4) + 5"
     n: N.Node = Parser().parse(sexpr)
     print(n)
