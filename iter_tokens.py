@@ -5,10 +5,6 @@ from typing import Iterator, Any, cast
 import re
 
 
-class _Re:
-    pass
-
-
 # (?P<name>...)
 TOKENS: dict[str, str] = {
     t[0]: f"(?P<{t[0]}>{t[1]})"
