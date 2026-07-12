@@ -8,7 +8,7 @@ import node as N
 
 class Parser:
     def __init__(self):
-        self.tokens: Iterator[T.Token] = iter()
+        self.tokens: Iterator[T.Token] = iter([])
 
     def _advance(self) -> T.Token:
         self.token = next(self.tokens)
