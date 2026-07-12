@@ -7,6 +7,9 @@ class Node:
     def __init__(self, val):
         self.val = val
 
+    def __repr__(self):
+        return f"{type(self).__name__}({self.val})"
+
 
 class Num(Node):
     pass
@@ -17,6 +20,9 @@ class BinOp(Node):
         super().__init__(val)
         self.left = left
         self.right = right
+
+    def __repr__(self):
+        return f"{type(self).__name__}({self.left}, {self.right})"
 
 
 class Plus(BinOp):
