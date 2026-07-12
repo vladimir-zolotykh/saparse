@@ -6,7 +6,7 @@ import re
 from enum import StrEnum
 
 
-class Symbols(StrEnum):
+class Symbol(StrEnum):
     PLUS = "+"
     MINUS = "-"
     MUL = "*"
