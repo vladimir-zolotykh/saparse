@@ -36,7 +36,7 @@ class Token:
         if isinstance(other, type(self)):
             return self.__dict__ == other.__dict__
         elif isinstance(other, str):
-            return self.name == other
+            return self.val == other
         else:
             return False
 
