@@ -21,6 +21,11 @@ Tokens: dict[str, str] = {
     for t in (
         ("NAME", r"[A-Za-z_][A-Za-z_0-9]+"),
         ("NUM", r"\d+"),
+        ("PLUS", r"\+"),
+        ("MINUS", r"-"),
+        ("MUL", r"\*"),
+        ("DIV", r"/"),
+        ("WS", r"\s+"),
         ("LPAREN", r"\("),
         ("RPAREN", r"\)"),
     )
