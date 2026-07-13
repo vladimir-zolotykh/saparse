@@ -6,11 +6,19 @@ import pytest
 import iter_tokens as T
 import node as N
 
+PLUS = T.Symbol.PLUS
+MINUS = T.Symbol.MINUS
+MUL = T.Symbol.MUL
+DIV = T.Symbol.DIV
+LPAREN = T.Symbol.LPAREN
+RPAREN = T.Symbol.RPAREN
+EOF = T.Symbol.EOF
+
 
 class Parser:
     def __init__(self):
         self.tokens: Iterator[T.Token] = iter([])
-        self.token: T.Token = T.Token("EOF")
+        self.token: T.Token = T.Token(EOF)
 
     def _next(self, tokens: Iterator[T.Token]) -> T.Token:
         tok: T.Token = next(self.tokens)
@@ -21,7 +29,7 @@ class Parser:
         self.token = self._next(self.tokens)
         return self.token
 
-    def _expect(self, expected: T.Token) -> None:
+    def _expect(self, expected: T.Symbol) -> None:
         if self.token != expected:
             raise SyntaxError(f"Expected {expected}, got {self.token}")
         self._consume()
@@ -30,19 +38,20 @@ class Parser:
         try:
             self.token = self._next(self.tokens)
         except StopIteration:
-            self.token = T.Token("EOF")
+            self.token = T.Token(EOF)
 
     def expr(self) -> N.Node:
         res: N.Node = self.term()
-        while (op := self.token) != "EOF" and op in ("+", "-"):
+        while (op := self.token) != EOF and op in (PLUS, MINUS):
             self._consume()
             right = self.term()
-            res = N.Plus(res, right) if op == "+" else N.Minus(res, right)
+            # res = N.Plus(res, right) if op == "+" else N.Minus(res, right)
+            res = N.Plus(res, right) if op == T.Symbol.PLUS else N.Minus(res, right)
         return res
 
     def term(self) -> N.Node:
         res: N.Node = self.factor()
-        while (op := self.token) != "EOF" and op in ("*", "/"):
+        while (op := self.token) != EOF and op in (MUL, DIV):
             self._consume()
             right = self.factor()
             res = N.Mul(res, right) if op == "*" else N.Div(res, right)
@@ -50,10 +59,10 @@ class Parser:
 
     def factor(self) -> N.Node:
         res: N.Node
-        if self.token == "(":
+        if self.token == LPAREN:
             self._consume()
             res = self.expr()
-            self._expect(T.Token("RPAREN", ")"))
+            self._expect(RPAREN)
         else:
             res = N.Num(float(self.token.val))
             self._consume()
@@ -72,8 +81,12 @@ class Parser:
         ["3 / 4", N.Div(N.Num(3.0), N.Num(4.0))],
         ["2 + (3) + 4", N.Plus(N.Plus(N.Num(2.0), N.Num(3.0)), N.Num(4.0))],
         [
-            "2 + (3 * 4) + 5",
-            N.Plus(N.Plus(N.Num(2.0), N.Mul(N.Num(3.0), N.Num(4.0))), N.Num(5.0)),
+            "2 + (4 - 2) + 5",
+            N.Plus(N.Plus(N.Num(2.0), N.Minus(N.Num(4.0), N.Num(2.0))), N.Num(5.0)),
+        ],
+        [
+            "2 + (4 + 2) + 5",
+            N.Plus(N.Plus(N.Num(2.0), N.Plus(N.Num(4.0), N.Num(2.0))), N.Num(5.0)),
         ],
     ],
 )
