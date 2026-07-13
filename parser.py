@@ -54,7 +54,7 @@ class Parser:
         while (op := self.token) != EOF and op in (MUL, DIV):
             self._consume()
             right = self.factor()
-            res = N.Mul(res, right) if op == "*" else N.Div(res, right)
+            res = N.Mul(res, right) if op == MUL else N.Div(res, right)
         return res
 
     def factor(self) -> N.Node:
@@ -87,6 +87,10 @@ class Parser:
         [
             "2 + (4 + 2) + 5",
             N.Plus(N.Plus(N.Num(2.0), N.Plus(N.Num(4.0), N.Num(2.0))), N.Num(5.0)),
+        ],
+        [
+            "2 + (3 * 4) + 5",
+            N.Plus(N.Plus(N.Num(2.0), N.Mul(N.Num(3.0), N.Num(4.0))), N.Num(5.0)),
         ],
     ],
 )
