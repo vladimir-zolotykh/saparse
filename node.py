@@ -7,6 +7,9 @@ class Node:
     def __init__(self, val):
         self.val = val
 
+    def __eq__(self, other: object) -> bool:
+        return self.val == other.val if isinstance(other, type(self)) else False
+
     def __repr__(self):
         return f"{type(self).__name__}({self.val})"
 
@@ -20,6 +23,11 @@ class BinOp(Node):
         super().__init__(val)
         self.left = left
         self.right = right
+
+    def __eq__(self, other: object) -> bool:
+        return (
+            self.__dict__ == other.__dict__ if isinstance(other, type(self)) else False
+        )
 
     def __repr__(self):
         return f"{type(self).__name__}({self.left}, {self.right})"
