@@ -18,6 +18,7 @@ class Parser:
 
     def _advance(self) -> T.Token:
         self.token = self._next(self.tokens)
+        print(f"_advance {self.token = }")
         # self.token = next(self.tokens)
         return self.token
 
@@ -34,7 +35,7 @@ class Parser:
 
     def expr(self) -> N.Node:
         res: N.Node = self.term()
-        while (op := self.token) and op in ("+", "-"):
+        while (op := self.token) != "EOF" and op in ("+", "-"):
             self._consume()
             right = self.term()
             res = N.Plus(res, right) if op == "+" else N.Minus(res, right)
@@ -42,7 +43,7 @@ class Parser:
 
     def term(self) -> N.Node:
         res: N.Node = self.factor()
-        while (op := self.token) and op in ("*", "/"):
+        while (op := self.token) != "EOF" and op in ("*", "/"):
             self._consume()
             right = self.factor
             res = N.Mul(res, right) if op == "*" else N.Div(res, right)
