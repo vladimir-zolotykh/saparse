@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
 from typing import Iterator
+import pytest
 import iter_tokens as T
 import node as N
 
@@ -64,10 +65,25 @@ class Parser:
         return self.expr()
 
 
-if __name__ == "__main__":
+@pytest.mark.parametrize(
+    ("sexpr", "expected"),
+    [
+        ["2 + 3", N.Plus(N.Num(2.0), N.Num(3.0))],
+        ["3 / 4", N.Div(N.Num(3.0), N.Num(4.0))],
+        ["2 + (3) + 4", N.Plus(N.Plus(N.Num(2.0), N.Num(3.0)), N.Num(4.0))],
+        [
+            "2 + (3 * 4) + 5",
+            N.Plus(N.Plus(N.Num(2.0), N.Mul(N.Num(3.0), N.Num(4.0))), N.Num(5.0)),
+        ],
+    ],
+)
+def test_parser_basic(sexpr, expected):
     # sexpr = "2 + 3"
-    # sexpr = "2 + (3) + 4"
-    # sexpr = "3 / 4"
+    # expected = N.Plus(N.Num(2.0), N.Num(3.0))
+    assert Parser().parse(sexpr) == expected
+
+
+if __name__ == "__main__":
     sexpr = "2 + (3 * 4) + 5"
     n: N.Node = Parser().parse(sexpr)
     print(n)
