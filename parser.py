@@ -13,13 +13,11 @@ class Parser:
 
     def _next(self, tokens: Iterator[T.Token]) -> T.Token:
         tok: T.Token = next(self.tokens)
-        # print(f"*** {tok = }")
+        print(f"_next {tok = }")
         return tok
 
     def _advance(self) -> T.Token:
         self.token = self._next(self.tokens)
-        print(f"_advance {self.token = }")
-        # self.token = next(self.tokens)
         return self.token
 
     def _expect(self, expected: T.Token) -> None:
@@ -29,7 +27,7 @@ class Parser:
 
     def _consume(self) -> None:
         try:
-            self._advance()
+            self.token = self._next(self.tokens)
         except StopIteration:
             self.token = T.Token("EOF")
 
