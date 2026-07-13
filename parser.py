@@ -13,7 +13,7 @@ class Parser:
 
     def _next(self, tokens: Iterator[T.Token]) -> T.Token:
         tok: T.Token = next(self.tokens)
-        print(f"_next {tok = }")
+        # print(f"_next {tok = }")
         return tok
 
     def _advance(self) -> T.Token:
@@ -43,7 +43,7 @@ class Parser:
         res: N.Node = self.factor()
         while (op := self.token) != "EOF" and op in ("*", "/"):
             self._consume()
-            right = self.factor
+            right = self.factor()
             res = N.Mul(res, right) if op == "*" else N.Div(res, right)
         return res
 
@@ -52,7 +52,7 @@ class Parser:
         if self.token == "(":
             self._consume()
             res = self.expr()
-            self._expect(T.Token(")"))
+            self._expect(T.Token("RPAREN", ")"))
         else:
             res = N.Num(float(self.token.val))
             self._consume()
@@ -65,7 +65,9 @@ class Parser:
 
 
 if __name__ == "__main__":
-    sexpr = "2 + 3"
-    # sexpr = "2 + (3 * 4) + 5"
+    # sexpr = "2 + 3"
+    # sexpr = "2 + (3) + 4"
+    # sexpr = "3 / 4"
+    sexpr = "2 + (3 * 4) + 5"
     n: N.Node = Parser().parse(sexpr)
     print(n)
