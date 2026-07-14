@@ -18,7 +18,6 @@ class MultiMethod:
         tup: tuple[type, ...] = tuple(
             p.annotation for n, p in sig.parameters.items() if n != "self"
         )
-        print(f"{tup = }")
         self.methods[tup] = func
 
     def __get__(self, instance, owner=None):
