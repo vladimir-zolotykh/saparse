@@ -53,7 +53,12 @@ class MultiMeta(type):
         return MultiDict()
 
 
+DO_DOTS = False
+
+
 def dots(func):
+    if not DO_DOTS:
+        return func
     name = func.__name__
 
     @wraps(func)
