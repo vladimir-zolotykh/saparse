@@ -59,11 +59,9 @@ def dots(func):
     @wraps(func)
     def wrapper(self, n):
         depth = getattr(self, "_depth", 0)
-        # print("." * depth, f"{name}({n})")
         print(f"{'.' * depth}{name}({n})")
         self._depth = depth + 4
         res = func(self, n)
-        # print("." * depth, f"->{res!r}")
         print(f"{'.' * depth}->{res!r}")
         return res
 
