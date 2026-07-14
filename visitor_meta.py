@@ -56,39 +56,41 @@ class MultiMeta(type):
         return MultiDict()
 
 
-def log(func):
+def dots(func):
     name = func.__name__
 
     @wraps(func)
     def wrapper(self, n):
         depth = getattr(self, "_depth", 0)
-        print(" " * depth, f"{name}({n})")
+        # print("." * depth, f"{name}({n})")
+        print(f"{'.' * depth}{name}({n})")
         self._depth = depth + 4
         res = func(self, n)
-        print(" " * depth, f"->{res!r}")
+        # print("." * depth, f"->{res!r}")
+        print(f"{'.' * depth}->{res!r}")
         return res
 
     return wrapper
 
 
 class Visitor(metaclass=MultiMeta):
-    @log
+    @dots
     def visit(self, n: N.Num) -> float:
         return float(n.val)
 
-    @log
+    @dots
     def visit(self, n: N.Plus) -> float:  # noqa: F811
         return self.visit(n.left) + self.visit(n.right)
 
-    @log
+    @dots
     def visit(self, n: N.Minus) -> float:  # noqa: F811
         return self.visit(n.left) - self.visit(n.right)
 
-    @log
+    @dots
     def visit(self, n: N.Mul) -> float:  # noqa: F811
         return self.visit(n.left) * self.visit(n.right)
 
-    @log
+    @dots
     def visit(self, n: N.Div) -> float:  # noqa: F811
         return self.visit(n.left) / self.visit(n.right)
 
