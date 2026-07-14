@@ -18,6 +18,7 @@ class MultiMethod:
         tup: tuple[type, ...] = tuple(
             p.annotation for n, p in sig.parameters.items() if n != "self"
         )
+        print(f"{tup = }")
         self.methods[tup] = func
 
     def __get__(self, instance, owner=None):
@@ -35,7 +36,7 @@ class MultiDict(dict):
         if key[:2] == "__" and key[-2:] == "__":
             super().__setitem__(key, val)
             return
-        if val not in self:
+        if key not in self:
             super().__setitem__(key, val)
             return
         oval = self[key]
