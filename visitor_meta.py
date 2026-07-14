@@ -4,6 +4,7 @@
 from typing import Callable
 from types import MethodType
 from inspect import signature
+from functools import wraps
 import node as N
 import parser as P
 
@@ -55,19 +56,39 @@ class MultiMeta(type):
         return MultiDict()
 
 
+def log(func):
+    name = func.__name__
+
+    @wraps(func)
+    def wrapper(self, n):
+        depth = getattr(self, "_depth", 0)
+        print(" " * depth, f"{name}({n})")
+        self._depth = depth + 4
+        res = func(self, n)
+        print(" " * depth, f"->{res!r}")
+        return res
+
+    return wrapper
+
+
 class Visitor(metaclass=MultiMeta):
+    @log
     def visit(self, n: N.Num) -> float:
         return float(n.val)
 
+    @log
     def visit(self, n: N.Plus) -> float:  # noqa: F811
         return self.visit(n.left) + self.visit(n.right)
 
+    @log
     def visit(self, n: N.Minus) -> float:  # noqa: F811
         return self.visit(n.left) - self.visit(n.right)
 
+    @log
     def visit(self, n: N.Mul) -> float:  # noqa: F811
         return self.visit(n.left) * self.visit(n.right)
 
+    @log
     def visit(self, n: N.Div) -> float:  # noqa: F811
         return self.visit(n.left) / self.visit(n.right)
 
