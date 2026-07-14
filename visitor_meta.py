@@ -33,10 +33,7 @@ class MultiMethod:
 
 class MultiDict(dict):
     def __setitem__(self, key: str, val: object) -> None:
-        if key[:2] == "__" and key[-2:] == "__":
-            super().__setitem__(key, val)
-            return
-        if key not in self:
+        if (key[:2] == "__" and key[-2:] == "__") or (key not in self):
             super().__setitem__(key, val)
             return
         oval = self[key]
