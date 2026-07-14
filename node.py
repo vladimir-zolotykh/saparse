@@ -8,7 +8,9 @@ class Node:
         self.val = val
 
     def __eq__(self, other: object) -> bool:
-        return self.val == other.val if isinstance(other, type(self)) else False
+        return (
+            self.val == other.val if isinstance(other, type(self)) else NotImplemented
+        )
 
     def __repr__(self):
         return f"{type(self).__name__}({self.val})"

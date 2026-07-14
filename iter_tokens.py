@@ -52,7 +52,7 @@ class Token:
         elif isinstance(other, Symbol):
             return self.name == other
         else:
-            return False
+            return NotImplemented
 
     def as_tuple(self):
         return ", ".join(f"{v!r}" for v in self.__dict__.values())
@@ -64,7 +64,6 @@ class Token:
 def iter_tokens(sexpr: str) -> Iterator[Token]:
     pat = "|".join(Tokens.values())
     for match in re.finditer(pat, sexpr):
-        # if match.lastgroup == "WS":
         if match.lastgroup == Symbol.WS:
             continue
         yield Token(cast(Symbol, match.lastgroup), match.group(0))

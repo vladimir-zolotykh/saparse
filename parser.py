@@ -22,7 +22,6 @@ class Parser:
 
     def _next(self, tokens: Iterator[T.Token]) -> T.Token:
         tok: T.Token = next(self.tokens)
-        # print(f"_next {tok = }")
         return tok
 
     def _advance(self) -> T.Token:
@@ -45,7 +44,6 @@ class Parser:
         while (op := self.token) != EOF and op in (PLUS, MINUS):
             self._consume()
             right = self.term()
-            # res = N.Plus(res, right) if op == "+" else N.Minus(res, right)
             res = N.Plus(res, right) if op == T.Symbol.PLUS else N.Minus(res, right)
         return res
 
@@ -95,8 +93,6 @@ class Parser:
     ],
 )
 def test_parser_basic(sexpr, expected):
-    # sexpr = "2 + 3"
-    # expected = N.Plus(N.Num(2.0), N.Num(3.0))
     assert Parser().parse(sexpr) == expected
 
 
